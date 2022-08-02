@@ -70,7 +70,7 @@ def add_default(m):
 
 def add_version(m):
     v = list(map(rq, m.groups()[0].split(', ')))
-    return (('VERSION', '.'.join(v[0:3]) + ''.join(v[3:])),)
+    return (('VERSION', '.'.join(v[:3]) + ''.join(v[3:])), )
 
 
 def add_doc(m):
@@ -86,9 +86,8 @@ with open(os.path.join(here, NAME, '__init__.py')) as meta_fh:
         if line.strip() == '# -eof meta-':
             break
         for pattern, handler in pats.items():
-            m = pattern.match(line.strip())
-            if m:
-                meta.update(handler(m))
+            if m := pattern.match(line.strip()):
+                meta |= handler(m)
 
 # -*- Installation Requires -*-
 
@@ -119,7 +118,7 @@ def reqs(*f):
 if os.path.exists('README.rst'):
     long_description = codecs.open('README.rst', 'r', 'utf-8').read()
 else:
-    long_description = 'See http://pypi.python.org/pypi/%s' % (NAME,)
+    long_description = f'See http://pypi.python.org/pypi/{NAME}'
 
 
 setup(

@@ -53,10 +53,7 @@ class MFAOAuth2Validator(OAuth2Validator):
             raise InvalidLoginError(force_text(
                 strings.INVALID_CREDENTIALS_ERROR))
 
-        mfa = None
-        if hasattr(user, "multi_factor_auth"):
-            mfa = user.multi_factor_auth
-
+        mfa = user.multi_factor_auth if hasattr(user, "multi_factor_auth") else None
         if mfa and mfa.enabled:
             mfa_code = request.extra_credentials.get("mfa_code")
             backup_code = request.extra_credentials.get("backup_code")

@@ -37,7 +37,6 @@ class ObtainMFAAuthToken(ObtainAuthToken):
                 "mfa_required": True,
                 "mfa_type": serializer.validated_data["mfa_type"]
             })
-        else:
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key})
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({"token": token.key})
